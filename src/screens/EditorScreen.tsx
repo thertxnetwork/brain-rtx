@@ -12,6 +12,7 @@ import { GitPanel } from '../components/toolwindows/GitPanel';
 import { FindReplace, FindOptions } from '../components/editor/FindReplace';
 import { SettingsScreen } from './SettingsScreen';
 import { useThemeStore } from '../store/themeStore';
+import { useSwipeGesture } from '../utils/gestures';
 
 type BottomPanel = 'terminal' | 'problems' | 'git' | null;
 
@@ -22,6 +23,30 @@ export const EditorScreen: React.FC = () => {
   const [isBottomPanelVisible, setIsBottomPanelVisible] = useState(true);
   const [showSettings, setShowSettings] = useState(false);
   const [showFindReplace, setShowFindReplace] = useState(false);
+
+  // Swipe gestures for mobile
+  const editorSwipeGesture = useSwipeGesture({
+    onSwipeRight: () => {
+      if (!isProjectTreeVisible) {
+        setIsProjectTreeVisible(true);
+      }
+    },
+    onSwipeLeft: () => {
+      if (isProjectTreeVisible) {
+        setIsProjectTreeVisible(false);
+      }
+    },
+    onSwipeUp: () => {
+      if (!isBottomPanelVisible) {
+        setIsBottomPanelVisible(true);
+      }
+    },
+    onSwipeDown: () => {
+      if (isBottomPanelVisible) {
+        setIsBottomPanelVisible(false);
+      }
+    },
+  });
 
   const handleFind = (text: string, options: FindOptions) => {
     console.log('Find:', text, options);
@@ -72,7 +97,7 @@ export const EditorScreen: React.FC = () => {
           </View>
         )}
         
-        <View style={styles.centerPanel}>
+        <View style={styles.centerPanel} {...editorSwipeGesture.panHandlers}>
           <View style={styles.editorArea}>
             <TabBar />
             <CodeEditor />
