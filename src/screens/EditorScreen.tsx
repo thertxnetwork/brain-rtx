@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { NavigationBar } from '../components/ui/NavigationBar';
 import { StatusBar } from '../components/ui/StatusBar';
 import { TabBar } from '../components/editor/TabBar';
@@ -8,8 +9,8 @@ import { ProjectTree } from '../components/toolwindows/ProjectTree';
 import { Terminal } from '../components/toolwindows/Terminal';
 import { Problems } from '../components/toolwindows/Problems';
 import { GitPanel } from '../components/toolwindows/GitPanel';
-import { ThemeSwitcher } from '../components/ui/ThemeSwitcher';
-import { FontSelector } from '../components/ui/FontSelector';
+import { FindReplace, FindOptions } from '../components/editor/FindReplace';
+import { SettingsScreen } from './SettingsScreen';
 import { useThemeStore } from '../store/themeStore';
 
 type BottomPanel = 'terminal' | 'problems' | 'git' | null;
@@ -19,6 +20,18 @@ export const EditorScreen: React.FC = () => {
   const [isProjectTreeVisible, setIsProjectTreeVisible] = useState(true);
   const [activeBottomPanel, setActiveBottomPanel] = useState<BottomPanel>('terminal');
   const [isBottomPanelVisible, setIsBottomPanelVisible] = useState(true);
+  const [showSettings, setShowSettings] = useState(false);
+  const [showFindReplace, setShowFindReplace] = useState(false);
+
+  const handleFind = (text: string, options: FindOptions) => {
+    console.log('Find:', text, options);
+    // Implement find logic here
+  };
+
+  const handleReplace = (findText: string, replaceText: string, replaceAll: boolean) => {
+    console.log('Replace:', findText, replaceText, replaceAll);
+    // Implement replace logic here
+  };
   
   const renderBottomPanel = () => {
     switch (activeBottomPanel) {
@@ -33,9 +46,24 @@ export const EditorScreen: React.FC = () => {
     }
   };
 
+  if (showSettings) {
+    return <SettingsScreen onClose={() => setShowSettings(false)} />;
+  }
+
   return (
     <View style={[styles.container, { backgroundColor: currentTheme.ui.background }]}>
-      <NavigationBar />
+      <NavigationBar 
+        onOpenSettings={() => setShowSettings(true)} 
+        onToggleSidebar={() => setIsProjectTreeVisible(!isProjectTreeVisible)} 
+      />
+      
+      {/* Find/Replace Modal */}
+      <FindReplace
+        visible={showFindReplace}
+        onClose={() => setShowFindReplace(false)}
+        onFind={handleFind}
+        onReplace={handleReplace}
+      />
       
       <View style={styles.mainContent}>
         {isProjectTreeVisible && (
@@ -132,8 +160,24 @@ export const EditorScreen: React.FC = () => {
             </Text>
           </TouchableOpacity>
         )}
-        <FontSelector />
-        <ThemeSwitcher />
+        <TouchableOpacity
+          style={[styles.bottomBarButton, { backgroundColor: currentTheme.ui.buttonBackground }]}
+          onPress={() => setShowFindReplace(true)}
+        >
+          <MaterialCommunityIcons name="magnify" size={16} color={currentTheme.ui.buttonForeground} />
+          <Text style={[styles.bottomBarButtonText, { color: currentTheme.ui.buttonForeground }]}>
+            Find
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.bottomBarButton, { backgroundColor: currentTheme.ui.buttonBackground }]}
+          onPress={() => setShowSettings(true)}
+        >
+          <MaterialCommunityIcons name="cog" size={16} color={currentTheme.ui.buttonForeground} />
+          <Text style={[styles.bottomBarButtonText, { color: currentTheme.ui.buttonForeground }]}>
+            Settings
+          </Text>
+        </TouchableOpacity>
       </View>
       
       <StatusBar />
@@ -200,6 +244,18 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   showPanelButtonText: {
+    fontSize: 12,
+    fontWeight: '500',
+  },
+  bottomBarButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 4,
+    gap: 6,
+  },
+  bottomBarButtonText: {
     fontSize: 12,
     fontWeight: '500',
   },
