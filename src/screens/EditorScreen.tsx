@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import { View, StyleSheet } from 'react-native';
+import { Button, IconButton } from 'react-native-paper';
 import { NavigationBar } from '../components/ui/NavigationBar';
 import { StatusBar } from '../components/ui/StatusBar';
 import { TabBar } from '../components/editor/TabBar';
@@ -8,9 +9,10 @@ import { ProjectTree } from '../components/toolwindows/ProjectTree';
 import { Terminal } from '../components/toolwindows/Terminal';
 import { Problems } from '../components/toolwindows/Problems';
 import { GitPanel } from '../components/toolwindows/GitPanel';
-import { ThemeSwitcher } from '../components/ui/ThemeSwitcher';
-import { FontSelector } from '../components/ui/FontSelector';
+import { FindReplace, FindOptions } from '../components/editor/FindReplace';
+import { SettingsScreen } from './SettingsScreen';
 import { useThemeStore } from '../store/themeStore';
+import { useSwipeGesture } from '../utils/gestures';
 
 type BottomPanel = 'terminal' | 'problems' | 'git' | null;
 
@@ -19,6 +21,42 @@ export const EditorScreen: React.FC = () => {
   const [isProjectTreeVisible, setIsProjectTreeVisible] = useState(true);
   const [activeBottomPanel, setActiveBottomPanel] = useState<BottomPanel>('terminal');
   const [isBottomPanelVisible, setIsBottomPanelVisible] = useState(true);
+  const [showSettings, setShowSettings] = useState(false);
+  const [showFindReplace, setShowFindReplace] = useState(false);
+
+  // Swipe gestures for mobile
+  const editorSwipeGesture = useSwipeGesture({
+    onSwipeRight: () => {
+      if (!isProjectTreeVisible) {
+        setIsProjectTreeVisible(true);
+      }
+    },
+    onSwipeLeft: () => {
+      if (isProjectTreeVisible) {
+        setIsProjectTreeVisible(false);
+      }
+    },
+    onSwipeUp: () => {
+      if (!isBottomPanelVisible) {
+        setIsBottomPanelVisible(true);
+      }
+    },
+    onSwipeDown: () => {
+      if (isBottomPanelVisible) {
+        setIsBottomPanelVisible(false);
+      }
+    },
+  });
+
+  const handleFind = (text: string, options: FindOptions) => {
+    console.log('Find:', text, options);
+    // Implement find logic here
+  };
+
+  const handleReplace = (findText: string, replaceText: string, replaceAll: boolean) => {
+    console.log('Replace:', findText, replaceText, replaceAll);
+    // Implement replace logic here
+  };
   
   const renderBottomPanel = () => {
     switch (activeBottomPanel) {
@@ -33,9 +71,24 @@ export const EditorScreen: React.FC = () => {
     }
   };
 
+  if (showSettings) {
+    return <SettingsScreen onClose={() => setShowSettings(false)} />;
+  }
+
   return (
     <View style={[styles.container, { backgroundColor: currentTheme.ui.background }]}>
-      <NavigationBar />
+      <NavigationBar 
+        onOpenSettings={() => setShowSettings(true)} 
+        onToggleSidebar={() => setIsProjectTreeVisible(!isProjectTreeVisible)} 
+      />
+      
+      {/* Find/Replace Modal */}
+      <FindReplace
+        visible={showFindReplace}
+        onClose={() => setShowFindReplace(false)}
+        onFind={handleFind}
+        onReplace={handleReplace}
+      />
       
       <View style={styles.mainContent}>
         {isProjectTreeVisible && (
@@ -44,7 +97,7 @@ export const EditorScreen: React.FC = () => {
           </View>
         )}
         
-        <View style={styles.centerPanel}>
+        <View style={styles.centerPanel} {...editorSwipeGesture.panHandlers}>
           <View style={styles.editorArea}>
             <TabBar />
             <CodeEditor />
@@ -56,61 +109,40 @@ export const EditorScreen: React.FC = () => {
                 backgroundColor: currentTheme.ui.toolWindowBackground,
                 borderTopColor: currentTheme.ui.border,
               }]}>
-                <TouchableOpacity
-                  style={[
-                    styles.panelTab,
-                    activeBottomPanel === 'terminal' && { 
-                      borderBottomColor: currentTheme.editor.keyword,
-                      borderBottomWidth: 2,
-                    },
-                  ]}
+                <Button
+                  mode={activeBottomPanel === 'terminal' ? 'contained' : 'text'}
                   onPress={() => setActiveBottomPanel('terminal')}
+                  compact
+                  icon="console"
                 >
-                  <Text style={[styles.panelTabText, { color: currentTheme.ui.foreground }]}>
-                    💻 Terminal
-                  </Text>
-                </TouchableOpacity>
+                  Terminal
+                </Button>
 
-                <TouchableOpacity
-                  style={[
-                    styles.panelTab,
-                    activeBottomPanel === 'problems' && { 
-                      borderBottomColor: currentTheme.editor.keyword,
-                      borderBottomWidth: 2,
-                    },
-                  ]}
+                <Button
+                  mode={activeBottomPanel === 'problems' ? 'contained' : 'text'}
                   onPress={() => setActiveBottomPanel('problems')}
+                  compact
+                  icon="alert-circle"
                 >
-                  <Text style={[styles.panelTabText, { color: currentTheme.ui.foreground }]}>
-                    ⚠️ Problems
-                  </Text>
-                </TouchableOpacity>
+                  Problems
+                </Button>
 
-                <TouchableOpacity
-                  style={[
-                    styles.panelTab,
-                    activeBottomPanel === 'git' && { 
-                      borderBottomColor: currentTheme.editor.keyword,
-                      borderBottomWidth: 2,
-                    },
-                  ]}
+                <Button
+                  mode={activeBottomPanel === 'git' ? 'contained' : 'text'}
                   onPress={() => setActiveBottomPanel('git')}
+                  compact
+                  icon="source-branch"
                 >
-                  <Text style={[styles.panelTabText, { color: currentTheme.ui.foreground }]}>
-                    🌿 Git
-                  </Text>
-                </TouchableOpacity>
+                  Git
+                </Button>
 
                 <View style={styles.panelTabSpacer} />
 
-                <TouchableOpacity
-                  style={styles.panelTab}
+                <IconButton
+                  icon="close"
+                  size={20}
                   onPress={() => setIsBottomPanelVisible(false)}
-                >
-                  <Text style={[styles.panelTabText, { color: currentTheme.ui.foreground }]}>
-                    ✕
-                  </Text>
-                </TouchableOpacity>
+                />
               </View>
 
               <View style={styles.bottomPanelContent}>
@@ -123,17 +155,30 @@ export const EditorScreen: React.FC = () => {
       
       <View style={styles.bottomBar}>
         {!isBottomPanelVisible && (
-          <TouchableOpacity
-            style={[styles.showPanelButton, { backgroundColor: currentTheme.ui.buttonBackground }]}
+          <Button
+            mode="contained"
             onPress={() => setIsBottomPanelVisible(true)}
+            compact
           >
-            <Text style={[styles.showPanelButtonText, { color: currentTheme.ui.buttonForeground }]}>
-              Show Panel
-            </Text>
-          </TouchableOpacity>
+            Show Panel
+          </Button>
         )}
-        <FontSelector />
-        <ThemeSwitcher />
+        <Button
+          mode="text"
+          onPress={() => setShowFindReplace(true)}
+          compact
+          icon="magnify"
+        >
+          Find
+        </Button>
+        <Button
+          mode="text"
+          onPress={() => setShowSettings(true)}
+          compact
+          icon="cog"
+        >
+          Settings
+        </Button>
       </View>
       
       <StatusBar />
@@ -168,16 +213,10 @@ const styles = StyleSheet.create({
   },
   bottomPanelTabs: {
     flexDirection: 'row',
-    height: 36,
+    height: 48,
     borderTopWidth: 1,
-  },
-  panelTab: {
-    paddingHorizontal: 16,
-    justifyContent: 'center',
-  },
-  panelTabText: {
-    fontSize: 13,
-    fontWeight: '500',
+    alignItems: 'center',
+    paddingHorizontal: 8,
   },
   panelTabSpacer: {
     flex: 1,
@@ -190,17 +229,9 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'center',
     paddingHorizontal: 8,
+    paddingVertical: 4,
     gap: 8,
     borderTopWidth: 1,
     borderTopColor: 'rgba(0, 0, 0, 0.1)',
-  },
-  showPanelButton: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 4,
-  },
-  showPanelButtonText: {
-    fontSize: 12,
-    fontWeight: '500',
   },
 });

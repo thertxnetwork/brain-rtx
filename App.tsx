@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, SafeAreaView } from 'react-native';
+import { Provider as PaperProvider } from 'react-native-paper';
 import { WelcomeScreen } from './src/screens/WelcomeScreen';
 import { EditorScreen } from './src/screens/EditorScreen';
 import { useProjectStore } from './src/store/projectStore';
 import { useThemeStore } from './src/store/themeStore';
+import { getPaperTheme } from './src/themes/paperTheme';
 
 export default function App() {
   const { projectPath, setProject, setFileTree } = useProjectStore();
   const { currentTheme } = useThemeStore();
   const [hasProject, setHasProject] = useState(false);
+  const paperTheme = getPaperTheme(currentTheme);
 
   const handleOpenProject = () => {
     // Simulate opening a project
@@ -84,17 +87,19 @@ export default function App() {
   };
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: currentTheme.ui.background }]}>
-      <StatusBar style={currentTheme.type === 'dark' ? 'light' : 'dark'} />
-      {!hasProject ? (
-        <WelcomeScreen 
-          onOpenProject={handleOpenProject}
-          onNewProject={handleNewProject}
-        />
-      ) : (
-        <EditorScreen />
-      )}
-    </SafeAreaView>
+    <PaperProvider theme={paperTheme}>
+      <SafeAreaView style={[styles.container, { backgroundColor: currentTheme.ui.background }]}>
+        <StatusBar style={currentTheme.type === 'dark' ? 'light' : 'dark'} />
+        {!hasProject ? (
+          <WelcomeScreen 
+            onOpenProject={handleOpenProject}
+            onNewProject={handleNewProject}
+          />
+        ) : (
+          <EditorScreen />
+        )}
+      </SafeAreaView>
+    </PaperProvider>
   );
 }
 

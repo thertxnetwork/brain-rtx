@@ -1,82 +1,33 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, StyleSheet } from 'react-native';
+import { Appbar, useTheme } from 'react-native-paper';
 import { useThemeStore } from '../../store/themeStore';
 import { useProjectStore } from '../../store/projectStore';
 
-export const NavigationBar: React.FC = () => {
+interface NavigationBarProps {
+  onOpenSettings?: () => void;
+  onToggleSidebar?: () => void;
+}
+
+export const NavigationBar: React.FC<NavigationBarProps> = ({ onOpenSettings, onToggleSidebar }) => {
   const { currentTheme } = useThemeStore();
   const { projectName } = useProjectStore();
+  const paperTheme = useTheme();
   
   return (
-    <View style={[styles.container, { backgroundColor: currentTheme.ui.background }]}>
-      <View style={styles.leftSection}>
-        <Text style={[styles.projectName, { color: currentTheme.ui.foreground }]}>
-          {projectName || 'Brain RTX'}
-        </Text>
-      </View>
-      
-      <View style={styles.centerSection}>
-        <TouchableOpacity style={[styles.button, { backgroundColor: currentTheme.ui.buttonBackground }]}>
-          <Text style={[styles.buttonText, { color: currentTheme.ui.buttonForeground }]}>▶️ Run</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={[styles.button, { backgroundColor: currentTheme.ui.buttonBackground }]}>
-          <Text style={[styles.buttonText, { color: currentTheme.ui.buttonForeground }]}>🐛 Debug</Text>
-        </TouchableOpacity>
-      </View>
-      
-      <View style={styles.rightSection}>
-        <TouchableOpacity style={styles.iconButton}>
-          <Text style={[styles.icon, { color: currentTheme.ui.foreground }]}>🌿</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.iconButton}>
-          <Text style={[styles.icon, { color: currentTheme.ui.foreground }]}>⚙️</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+    <Appbar.Header style={[styles.container, { backgroundColor: currentTheme.ui.background }]}>
+      <Appbar.Action icon="menu" onPress={onToggleSidebar} />
+      <Appbar.Content title={projectName || 'Brain RTX'} />
+      <Appbar.Action icon="play" onPress={() => {}} />
+      <Appbar.Action icon="bug" onPress={() => {}} />
+      <Appbar.Action icon="source-branch" onPress={() => {}} />
+      <Appbar.Action icon="cog" onPress={onOpenSettings} />
+    </Appbar.Header>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    height: 48,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(0, 0, 0, 0.1)',
-  },
-  leftSection: {
-    flex: 1,
-  },
-  centerSection: {
-    flexDirection: 'row',
-    gap: 8,
-  },
-  rightSection: {
-    flexDirection: 'row',
-    gap: 4,
-    marginLeft: 16,
-  },
-  projectName: {
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  button: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 4,
-  },
-  buttonText: {
-    fontSize: 13,
-    fontWeight: '500',
-  },
-  iconButton: {
-    width: 32,
-    height: 32,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  icon: {
-    fontSize: 18,
+    elevation: 0,
   },
 });

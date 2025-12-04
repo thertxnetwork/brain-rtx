@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
+import { View, StyleSheet, ScrollView, Dimensions } from 'react-native';
+import { Text, Card, Button, Chip } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeStore } from '../store/themeStore';
 import { FolderIcon } from '../components/ui/FileIcon';
@@ -13,113 +14,145 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onOpenProject, onN
   const { currentTheme } = useThemeStore();
   
   const recentProjects = [
-    { name: 'my-react-app', path: '/home/user/projects/my-react-app', lastOpened: '2 hours ago' },
-    { name: 'backend-api', path: '/home/user/projects/backend-api', lastOpened: '1 day ago' },
-    { name: 'mobile-app', path: '/home/user/projects/mobile-app', lastOpened: '3 days ago' },
+    { name: 'my-react-app', path: '/home/user/projects/my-react-app', lastOpened: '2 hours ago', type: 'React' },
+    { name: 'backend-api', path: '/home/user/projects/backend-api', lastOpened: '1 day ago', type: 'Node.js' },
+    { name: 'mobile-app', path: '/home/user/projects/mobile-app', lastOpened: '3 days ago', type: 'React Native' },
   ];
   
   return (
     <View style={[styles.container, { backgroundColor: currentTheme.ui.background }]}>
-      <View style={styles.header}>
-        <Text style={[styles.title, { color: currentTheme.ui.foreground }]}>
-          Brain RTX IDE
-        </Text>
-        <Text style={[styles.subtitle, { color: currentTheme.ui.foreground }]}>
-          Professional Code Editor for Android
-        </Text>
+      {/* Hero Section */}
+      <View style={[styles.heroSection, { backgroundColor: currentTheme.editor.background }]}>
+        <View style={styles.heroContent}>
+          <View style={styles.logoContainer}>
+            <MaterialCommunityIcons name="brain" size={64} color={currentTheme.editor.keyword} />
+          </View>
+          <Text variant="displaySmall" style={[styles.title, { color: currentTheme.ui.foreground }]}>
+            Brain RTX IDE
+          </Text>
+          <Text variant="bodyLarge" style={[styles.subtitle, { color: currentTheme.ui.foreground, opacity: 0.7 }]}>
+            Professional Code Editor for Modern Developers
+          </Text>
+          <Chip icon="information" style={styles.versionBadge}>
+            v1.0.0
+          </Chip>
+        </View>
       </View>
       
-      <View style={styles.content}>
-        <View style={styles.leftPanel}>
-          <Text style={[styles.sectionTitle, { color: currentTheme.ui.foreground }]}>
-            Quick Actions
+      <View style={styles.contentWrapper}>
+        {/* Quick Actions */}
+        <View style={styles.quickActionsSection}>
+          <Text variant="headlineSmall" style={[styles.sectionTitle, { color: currentTheme.ui.foreground }]}>
+            Get Started
           </Text>
           
-          <TouchableOpacity
-            style={[styles.actionButton, { 
-              backgroundColor: currentTheme.ui.buttonBackground,
-              borderColor: currentTheme.ui.border,
-            }]}
-            onPress={onOpenProject}
-          >
-            <MaterialCommunityIcons name="folder-open" size={32} color={currentTheme.ui.buttonForeground} />
-            <View style={styles.actionTextContainer}>
-              <Text style={[styles.actionTitle, { color: currentTheme.ui.buttonForeground }]}>
-                Open Project
-              </Text>
-              <Text style={[styles.actionDescription, { color: currentTheme.ui.buttonForeground, opacity: 0.7 }]}>
-                Open an existing project
-              </Text>
-            </View>
-          </TouchableOpacity>
-          
-          <TouchableOpacity
-            style={[styles.actionButton, { 
-              backgroundColor: currentTheme.ui.buttonBackground,
-              borderColor: currentTheme.ui.border,
-            }]}
-            onPress={onNewProject}
-          >
-            <MaterialCommunityIcons name="plus-circle" size={32} color={currentTheme.ui.buttonForeground} />
-            <View style={styles.actionTextContainer}>
-              <Text style={[styles.actionTitle, { color: currentTheme.ui.buttonForeground }]}>
-                New Project
-              </Text>
-              <Text style={[styles.actionDescription, { color: currentTheme.ui.buttonForeground, opacity: 0.7 }]}>
-                Create a new project
-              </Text>
-            </View>
-          </TouchableOpacity>
-          
-          <TouchableOpacity
-            style={[styles.actionButton, { 
-              backgroundColor: currentTheme.ui.buttonBackground,
-              borderColor: currentTheme.ui.border,
-            }]}
-          >
-            <MaterialCommunityIcons name="git" size={32} color={currentTheme.ui.buttonForeground} />
-            <View style={styles.actionTextContainer}>
-              <Text style={[styles.actionTitle, { color: currentTheme.ui.buttonForeground }]}>
-                Clone from Git
-              </Text>
-              <Text style={[styles.actionDescription, { color: currentTheme.ui.buttonForeground, opacity: 0.7 }]}>
-                Clone a repository
-              </Text>
-            </View>
-          </TouchableOpacity>
+          <View style={styles.actionsGrid}>
+            <Card style={styles.actionCard} mode="outlined" onPress={onOpenProject}>
+              <Card.Content style={styles.actionCardContent}>
+                <View style={[styles.actionIconContainer, { backgroundColor: currentTheme.editor.keyword + '20' }]}>
+                  <MaterialCommunityIcons name="folder-open" size={32} color={currentTheme.editor.keyword} />
+                </View>
+                <Text variant="titleMedium" style={[styles.actionTitle, { color: currentTheme.ui.foreground }]}>
+                  Open Project
+                </Text>
+                <Text variant="bodySmall" style={[styles.actionDescription, { color: currentTheme.ui.foreground, opacity: 0.6 }]}>
+                  Open an existing project from your device
+                </Text>
+              </Card.Content>
+            </Card>
+            
+            <Card style={styles.actionCard} mode="outlined" onPress={onNewProject}>
+              <Card.Content style={styles.actionCardContent}>
+                <View style={[styles.actionIconContainer, { backgroundColor: currentTheme.editor.string + '20' }]}>
+                  <MaterialCommunityIcons name="plus-circle" size={32} color={currentTheme.editor.string} />
+                </View>
+                <Text variant="titleMedium" style={[styles.actionTitle, { color: currentTheme.ui.foreground }]}>
+                  New Project
+                </Text>
+                <Text variant="bodySmall" style={[styles.actionDescription, { color: currentTheme.ui.foreground, opacity: 0.6 }]}>
+                  Create a new project from scratch
+                </Text>
+              </Card.Content>
+            </Card>
+            
+            <Card style={styles.actionCard} mode="outlined">
+              <Card.Content style={styles.actionCardContent}>
+                <View style={[styles.actionIconContainer, { backgroundColor: currentTheme.editor.function + '20' }]}>
+                  <MaterialCommunityIcons name="git" size={32} color={currentTheme.editor.function} />
+                </View>
+                <Text variant="titleMedium" style={[styles.actionTitle, { color: currentTheme.ui.foreground }]}>
+                  Clone Repository
+                </Text>
+                <Text variant="bodySmall" style={[styles.actionDescription, { color: currentTheme.ui.foreground, opacity: 0.6 }]}>
+                  Clone from Git repository
+                </Text>
+              </Card.Content>
+            </Card>
+          </View>
         </View>
         
-        <View style={styles.rightPanel}>
-          <Text style={[styles.sectionTitle, { color: currentTheme.ui.foreground }]}>
-            Recent Projects
-          </Text>
+        {/* Recent Projects */}
+        <View style={styles.recentSection}>
+          <View style={styles.sectionHeader}>
+            <Text variant="headlineSmall" style={[styles.sectionTitle, { color: currentTheme.ui.foreground }]}>
+              Recent Projects
+            </Text>
+            <Button mode="text">See All</Button>
+          </View>
           
-          <ScrollView style={styles.recentList}>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.recentList}>
             {recentProjects.map((project, index) => (
-              <TouchableOpacity
-                key={index}
-                style={[styles.recentItem, { 
-                  backgroundColor: currentTheme.ui.toolWindowBackground,
-                  borderColor: currentTheme.ui.border,
-                }]}
-              >
-                <View style={styles.recentIconContainer}>
-                  <FolderIcon foldername={project.name} size={24} />
-                </View>
-                <View style={styles.recentInfo}>
-                  <Text style={[styles.recentName, { color: currentTheme.ui.foreground }]}>
+              <Card key={index} style={styles.recentCard} mode="outlined">
+                <Card.Content>
+                  <View style={styles.recentCardHeader}>
+                    <FolderIcon foldername={project.name} size={32} />
+                    <Chip mode="flat" compact>
+                      {project.type}
+                    </Chip>
+                  </View>
+                  <Text variant="titleMedium" style={[styles.recentName, { color: currentTheme.ui.foreground }]}>
                     {project.name}
                   </Text>
-                  <Text style={[styles.recentPath, { color: currentTheme.ui.foreground, opacity: 0.6 }]}>
+                  <Text variant="bodySmall" style={[styles.recentPath, { color: currentTheme.ui.foreground, opacity: 0.5 }]} numberOfLines={1}>
                     {project.path}
                   </Text>
-                  <Text style={[styles.recentTime, { color: currentTheme.ui.foreground, opacity: 0.5 }]}>
-                    {project.lastOpened}
-                  </Text>
-                </View>
-              </TouchableOpacity>
+                  <View style={styles.recentFooter}>
+                    <MaterialCommunityIcons name="clock-outline" size={14} color={currentTheme.ui.foreground} style={{ opacity: 0.5 }} />
+                    <Text variant="bodySmall" style={[styles.recentTime, { color: currentTheme.ui.foreground, opacity: 0.5 }]}>
+                      {project.lastOpened}
+                    </Text>
+                  </View>
+                </Card.Content>
+              </Card>
             ))}
           </ScrollView>
+        </View>
+
+        {/* Features Highlight */}
+        <View style={styles.featuresSection}>
+          <Text variant="headlineSmall" style={[styles.sectionTitle, { color: currentTheme.ui.foreground }]}>
+            Features
+          </Text>
+          <View style={styles.featuresGrid}>
+            {[
+              { icon: 'palette', title: '17+ Themes', desc: 'Professional color schemes' },
+              { icon: 'source-branch', title: 'Git Integration', desc: 'Version control built-in' },
+              { icon: 'code-tags', title: 'Syntax Highlighting', desc: 'Multiple languages' },
+              { icon: 'file-tree', title: 'Project Explorer', desc: 'Easy navigation' },
+            ].map((feature, index) => (
+              <Card key={index} style={styles.featureCard} mode="outlined">
+                <Card.Content style={styles.featureCardContent}>
+                  <MaterialCommunityIcons name={feature.icon as any} size={24} color={currentTheme.editor.keyword} />
+                  <Text variant="titleSmall" style={[styles.featureTitle, { color: currentTheme.ui.foreground }]}>
+                    {feature.title}
+                  </Text>
+                  <Text variant="bodySmall" style={[styles.featureDesc, { color: currentTheme.ui.foreground, opacity: 0.6 }]}>
+                    {feature.desc}
+                  </Text>
+                </Card.Content>
+              </Card>
+            ))}
+          </View>
         </View>
       </View>
     </View>
@@ -132,87 +165,124 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  header: {
-    padding: 32,
+  heroSection: {
+    paddingVertical: 48,
+    paddingHorizontal: 24,
     alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(0, 0, 0, 0.1)',
+    borderBottomLeftRadius: 32,
+    borderBottomRightRadius: 32,
   },
-  title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    marginBottom: 8,
+  heroContent: {
+    alignItems: 'center',
   },
-  subtitle: {
-    fontSize: 16,
-    opacity: 0.7,
-  },
-  content: {
-    flex: 1,
-    flexDirection: width > 600 ? 'row' : 'column',
-    padding: 24,
-  },
-  leftPanel: {
-    flex: 1,
-    paddingRight: width > 600 ? 12 : 0,
-    marginBottom: width > 600 ? 0 : 24,
-  },
-  rightPanel: {
-    flex: 1,
-    paddingLeft: width > 600 ? 12 : 0,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
+  logoContainer: {
     marginBottom: 16,
   },
-  actionButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 16,
-    borderRadius: 8,
-    marginBottom: 12,
-    borderWidth: 1,
+  title: {
+    marginBottom: 8,
+    textAlign: 'center',
   },
-  actionTextContainer: {
+  subtitle: {
+    textAlign: 'center',
+    marginBottom: 16,
+  },
+  versionBadge: {
+    marginTop: 8,
+  },
+  contentWrapper: {
     flex: 1,
-    marginLeft: 16,
+    padding: 24,
+  },
+  quickActionsSection: {
+    marginBottom: 32,
+  },
+  sectionTitle: {
+    marginBottom: 16,
+  },
+  actionsGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 16,
+  },
+  actionCard: {
+    flex: 1,
+    minWidth: width > 600 ? 200 : '100%',
+  },
+  actionCardContent: {
+    alignItems: 'center',
+    padding: 8,
+  },
+  actionIconContainer: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 12,
   },
   actionTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 4,
+    marginBottom: 6,
+    textAlign: 'center',
   },
   actionDescription: {
-    fontSize: 13,
+    textAlign: 'center',
+  },
+  recentSection: {
+    marginBottom: 32,
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
   },
   recentList: {
-    flex: 1,
-  },
-  recentItem: {
     flexDirection: 'row',
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 8,
-    borderWidth: 1,
   },
-  recentIconContainer: {
+  recentCard: {
+    width: 240,
     marginRight: 12,
-    justifyContent: 'center',
   },
-  recentInfo: {
-    flex: 1,
+  recentCardHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: 12,
   },
   recentName: {
-    fontSize: 15,
-    fontWeight: '600',
     marginBottom: 4,
   },
   recentPath: {
-    fontSize: 12,
-    marginBottom: 2,
+    marginBottom: 8,
   },
-  recentTime: {
-    fontSize: 11,
+  recentFooter: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  recentTime: {},
+  featuresSection: {
+    marginBottom: 32,
+  },
+  featuresGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 12,
+  },
+  featureCard: {
+    flex: 1,
+    minWidth: width > 600 ? 150 : '45%',
+  },
+  featureCardContent: {
+    alignItems: 'center',
+    padding: 8,
+  },
+  featureTitle: {
+    marginTop: 8,
+    marginBottom: 4,
+    textAlign: 'center',
+  },
+  featureDesc: {
+    textAlign: 'center',
   },
 });

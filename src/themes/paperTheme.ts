@@ -1,0 +1,148 @@
+import { MD3DarkTheme, MD3LightTheme, configureFonts } from 'react-native-paper';
+import { Theme as CustomTheme } from '../types/theme';
+
+const fontConfig = {
+  displayLarge: {
+    fontFamily: 'monospace',
+    fontSize: 57,
+    fontWeight: '400' as const,
+    letterSpacing: 0,
+    lineHeight: 64,
+  },
+  displayMedium: {
+    fontFamily: 'monospace',
+    fontSize: 45,
+    fontWeight: '400' as const,
+    letterSpacing: 0,
+    lineHeight: 52,
+  },
+  displaySmall: {
+    fontFamily: 'monospace',
+    fontSize: 36,
+    fontWeight: '400' as const,
+    letterSpacing: 0,
+    lineHeight: 44,
+  },
+  headlineLarge: {
+    fontFamily: 'monospace',
+    fontSize: 32,
+    fontWeight: '400' as const,
+    letterSpacing: 0,
+    lineHeight: 40,
+  },
+  headlineMedium: {
+    fontFamily: 'monospace',
+    fontSize: 28,
+    fontWeight: '400' as const,
+    letterSpacing: 0,
+    lineHeight: 36,
+  },
+  headlineSmall: {
+    fontFamily: 'monospace',
+    fontSize: 24,
+    fontWeight: '400' as const,
+    letterSpacing: 0,
+    lineHeight: 32,
+  },
+  titleLarge: {
+    fontFamily: 'monospace',
+    fontSize: 22,
+    fontWeight: '400' as const,
+    letterSpacing: 0,
+    lineHeight: 28,
+  },
+  titleMedium: {
+    fontFamily: 'monospace',
+    fontSize: 16,
+    fontWeight: '500' as const,
+    letterSpacing: 0.15,
+    lineHeight: 24,
+  },
+  titleSmall: {
+    fontFamily: 'monospace',
+    fontSize: 14,
+    fontWeight: '500' as const,
+    letterSpacing: 0.1,
+    lineHeight: 20,
+  },
+  labelLarge: {
+    fontFamily: 'monospace',
+    fontSize: 14,
+    fontWeight: '500' as const,
+    letterSpacing: 0.1,
+    lineHeight: 20,
+  },
+  labelMedium: {
+    fontFamily: 'monospace',
+    fontSize: 12,
+    fontWeight: '500' as const,
+    letterSpacing: 0.5,
+    lineHeight: 16,
+  },
+  labelSmall: {
+    fontFamily: 'monospace',
+    fontSize: 11,
+    fontWeight: '500' as const,
+    letterSpacing: 0.5,
+    lineHeight: 16,
+  },
+  bodyLarge: {
+    fontFamily: 'monospace',
+    fontSize: 16,
+    fontWeight: '400' as const,
+    letterSpacing: 0.5,
+    lineHeight: 24,
+  },
+  bodyMedium: {
+    fontFamily: 'monospace',
+    fontSize: 14,
+    fontWeight: '400' as const,
+    letterSpacing: 0.25,
+    lineHeight: 20,
+  },
+  bodySmall: {
+    fontFamily: 'monospace',
+    fontSize: 12,
+    fontWeight: '400' as const,
+    letterSpacing: 0.4,
+    lineHeight: 16,
+  },
+};
+
+export const getPaperTheme = (customTheme: CustomTheme) => {
+  const baseTheme = customTheme.type === 'dark' ? MD3DarkTheme : MD3LightTheme;
+
+  return {
+    ...baseTheme,
+    fonts: configureFonts({ config: fontConfig }),
+    colors: {
+      ...baseTheme.colors,
+      primary: customTheme.editor.keyword,
+      primaryContainer: customTheme.ui.selectionBackground,
+      secondary: customTheme.editor.function,
+      secondaryContainer: customTheme.ui.toolWindowBackground,
+      tertiary: customTheme.editor.string,
+      error: customTheme.git.deleted,
+      errorContainer: customTheme.git.deleted + '20',
+      background: customTheme.ui.background,
+      surface: customTheme.ui.toolWindowBackground,
+      surfaceVariant: customTheme.editor.background,
+      outline: customTheme.ui.border,
+      onPrimary: '#ffffff',
+      onPrimaryContainer: customTheme.editor.foreground,
+      onSecondary: '#ffffff',
+      onSecondaryContainer: customTheme.ui.foreground,
+      onTertiary: '#ffffff',
+      onBackground: customTheme.ui.foreground,
+      onSurface: customTheme.ui.foreground,
+      onSurfaceVariant: customTheme.editor.foreground,
+      onError: '#ffffff',
+      inverseSurface: customTheme.editor.selection,
+      inverseOnSurface: customTheme.editor.foreground,
+      inversePrimary: customTheme.editor.keyword,
+      surfaceDisabled: customTheme.ui.border,
+      onSurfaceDisabled: customTheme.ui.foreground + '60',
+      backdrop: 'rgba(0, 0, 0, 0.5)',
+    },
+  };
+};
