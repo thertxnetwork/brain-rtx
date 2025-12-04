@@ -1,5 +1,5 @@
 import React from 'react';
-import { MaterialCommunityIcons, MaterialIcons, FontAwesome5, Ionicons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ViewStyle } from 'react-native';
 
 export interface FileIconProps {

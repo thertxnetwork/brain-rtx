@@ -140,7 +140,7 @@ export const FontSelector: React.FC = () => {
                       lineHeight: fontSize * lineHeight,
                     },
                   ]}>
-                    {`// ${editorFont.name} - ${fontSize}px - ${lineHeight}\n${editorFont.previewText}\nfunction example() {\n  return "Hello, World!";\n}\n\nconst result = example();`}
+                    {getPreviewText(editorFont, fontSize, lineHeight)}
                   </Text>
                 </View>
               </View>
@@ -150,6 +150,19 @@ export const FontSelector: React.FC = () => {
       </Modal>
     </>
   );
+};
+
+/**
+ * Generate preview text for font display
+ */
+const getPreviewText = (font: EditorFont, size: number, height: number): string => {
+  return `// ${font.name} - ${size}px - ${height}
+${font.previewText}
+function example() {
+  return "Hello, World!";
+}
+
+const result = example();`;
 };
 
 interface FontItemProps {
