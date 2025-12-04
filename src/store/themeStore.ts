@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { Theme } from '../types/theme';
+import { EditorFont, DEFAULT_FONT, DEFAULT_FONT_SIZE, DEFAULT_LINE_HEIGHT } from '../utils/fonts';
 
 // Import all themes
 import darcula from '../themes/darcula.json';
@@ -43,16 +44,25 @@ export const BUILT_IN_THEMES: Theme[] = [
 interface ThemeState {
   currentTheme: Theme;
   customThemes: Theme[];
+  editorFont: EditorFont;
+  fontSize: number;
+  lineHeight: number;
   setTheme: (theme: Theme) => void;
   addCustomTheme: (theme: Theme) => void;
   removeCustomTheme: (themeId: string) => void;
   getAllThemes: () => Theme[];
   getThemeById: (themeId: string) => Theme | undefined;
+  setEditorFont: (font: EditorFont) => void;
+  setFontSize: (size: number) => void;
+  setLineHeight: (height: number) => void;
 }
 
 export const useThemeStore = create<ThemeState>((set, get) => ({
   currentTheme: BUILT_IN_THEMES[0], // Default to Darcula
   customThemes: [],
+  editorFont: DEFAULT_FONT,
+  fontSize: DEFAULT_FONT_SIZE,
+  lineHeight: DEFAULT_LINE_HEIGHT,
   
   setTheme: (theme) => set({ currentTheme: theme }),
   
@@ -72,4 +82,10 @@ export const useThemeStore = create<ThemeState>((set, get) => ({
     const allThemes = get().getAllThemes();
     return allThemes.find((t) => t.id === themeId);
   },
+  
+  setEditorFont: (font) => set({ editorFont: font }),
+  
+  setFontSize: (size) => set({ fontSize: size }),
+  
+  setLineHeight: (height) => set({ lineHeight: height }),
 }));

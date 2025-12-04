@@ -4,7 +4,7 @@ import { useThemeStore } from '../../store/themeStore';
 import { useProjectStore } from '../../store/projectStore';
 
 export const CodeEditor: React.FC = () => {
-  const { currentTheme } = useThemeStore();
+  const { currentTheme, editorFont, fontSize, lineHeight } = useThemeStore();
   const { getActiveFile, updateFileContent, updateFileDirty } = useProjectStore();
   const activeFile = getActiveFile();
   
@@ -19,6 +19,7 @@ export const CodeEditor: React.FC = () => {
   };
   
   const lines = code.split('\n');
+  const lineHeightValue = fontSize * lineHeight;
   
   return (
     <View style={[styles.container, { backgroundColor: currentTheme.editor.background }]}>
@@ -31,7 +32,12 @@ export const CodeEditor: React.FC = () => {
                 key={index}
                 style={[
                   styles.lineNumber,
-                  { color: currentTheme.ui.gutterForeground },
+                  { 
+                    color: currentTheme.ui.gutterForeground,
+                    height: lineHeightValue,
+                    lineHeight: lineHeightValue,
+                    fontSize: fontSize - 1,
+                  },
                 ]}
               >
                 {index + 1}
@@ -47,9 +53,9 @@ export const CodeEditor: React.FC = () => {
               styles.codeInput,
               {
                 color: currentTheme.editor.foreground,
-                fontFamily: currentTheme.fontFamily,
-                fontSize: currentTheme.fontSize,
-                lineHeight: currentTheme.fontSize * currentTheme.lineHeight,
+                fontFamily: editorFont.family,
+                fontSize: fontSize,
+                lineHeight: lineHeightValue,
               },
             ]}
             multiline
@@ -81,9 +87,7 @@ const styles = StyleSheet.create({
     paddingTop: 8,
   },
   lineNumber: {
-    fontSize: 13,
     textAlign: 'right',
-    height: 21,
   },
   codeArea: {
     flex: 1,

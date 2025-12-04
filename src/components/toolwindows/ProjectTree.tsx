@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { useThemeStore } from '../../store/themeStore';
 import { useProjectStore, FileNode } from '../../store/projectStore';
+import { FileIcon, FolderIcon } from '../ui/FileIcon';
 
 export const ProjectTree: React.FC = () => {
   const { currentTheme } = useThemeStore();
@@ -10,8 +11,9 @@ export const ProjectTree: React.FC = () => {
   return (
     <View style={[styles.container, { backgroundColor: currentTheme.ui.toolWindowBackground }]}>
       <View style={[styles.header, { borderBottomColor: currentTheme.ui.toolWindowBorder }]}>
+        <FolderIcon foldername={projectName || 'Project'} size={18} style={styles.headerIcon} />
         <Text style={[styles.headerText, { color: currentTheme.ui.foreground }]}>
-          📁 {projectName || 'Project'}
+          {projectName || 'Project'}
         </Text>
       </View>
       <ScrollView style={styles.treeView}>
@@ -55,10 +57,6 @@ const TreeNode: React.FC<TreeNodeProps> = ({ node, level }) => {
     }
   };
   
-  const icon = node.type === 'directory'
-    ? isExpanded ? '📂' : '📁'
-    : getFileIcon(node.name);
-  
   const gitStatusColor = node.gitStatus 
     ? currentTheme.git[node.gitStatus]
     : currentTheme.ui.foreground;
@@ -72,7 +70,20 @@ const TreeNode: React.FC<TreeNodeProps> = ({ node, level }) => {
         ]}
         onPress={handlePress}
       >
-        <Text style={styles.nodeIcon}>{icon}</Text>
+        {node.type === 'directory' ? (
+          <FolderIcon 
+            foldername={node.name} 
+            isExpanded={isExpanded}
+            size={16}
+            style={styles.nodeIcon}
+          />
+        ) : (
+          <FileIcon 
+            filename={node.name}
+            size={16}
+            style={styles.nodeIcon}
+          />
+        )}
         <Text style={[styles.nodeName, { color: gitStatusColor }]}>
           {node.name}
         </Text>
@@ -82,27 +93,6 @@ const TreeNode: React.FC<TreeNodeProps> = ({ node, level }) => {
       ))}
     </>
   );
-};
-
-const getFileIcon = (filename: string): string => {
-  const ext = filename.split('.').pop()?.toLowerCase();
-  const iconMap: { [key: string]: string } = {
-    js: '📜',
-    ts: '📘',
-    jsx: '⚛️',
-    tsx: '⚛️',
-    json: '📋',
-    md: '📝',
-    css: '🎨',
-    html: '🌐',
-    py: '🐍',
-    java: '☕',
-    go: '🔷',
-    rs: '🦀',
-    php: '🐘',
-    rb: '💎',
-  };
-  return iconMap[ext || ''] || '📄';
 };
 
 const getLanguageFromExtension = (filename: string): string => {
@@ -133,8 +123,13 @@ const styles = StyleSheet.create({
     borderRightColor: 'rgba(0, 0, 0, 0.1)',
   },
   header: {
+    flexDirection: 'row',
+    alignItems: 'center',
     padding: 12,
     borderBottomWidth: 1,
+  },
+  headerIcon: {
+    marginRight: 8,
   },
   headerText: {
     fontSize: 14,
@@ -151,8 +146,7 @@ const styles = StyleSheet.create({
     paddingRight: 8,
   },
   nodeIcon: {
-    marginRight: 6,
-    fontSize: 14,
+    marginRight: 8,
   },
   nodeName: {
     fontSize: 13,

@@ -9,6 +9,7 @@ import { Terminal } from '../components/toolwindows/Terminal';
 import { Problems } from '../components/toolwindows/Problems';
 import { GitPanel } from '../components/toolwindows/GitPanel';
 import { ThemeSwitcher } from '../components/ui/ThemeSwitcher';
+import { FontSelector } from '../components/ui/FontSelector';
 import { useThemeStore } from '../store/themeStore';
 
 type BottomPanel = 'terminal' | 'problems' | 'git' | null;
@@ -131,6 +132,7 @@ export const EditorScreen: React.FC = () => {
             </Text>
           </TouchableOpacity>
         )}
+        <FontSelector />
         <ThemeSwitcher />
       </View>
       

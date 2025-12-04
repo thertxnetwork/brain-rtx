@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeStore } from '../store/themeStore';
+import { FolderIcon } from '../components/ui/FileIcon';
 
 interface WelcomeScreenProps {
   onOpenProject: () => void;
@@ -40,7 +42,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onOpenProject, onN
             }]}
             onPress={onOpenProject}
           >
-            <Text style={styles.actionIcon}>📂</Text>
+            <MaterialCommunityIcons name="folder-open" size={32} color={currentTheme.ui.buttonForeground} />
             <View style={styles.actionTextContainer}>
               <Text style={[styles.actionTitle, { color: currentTheme.ui.buttonForeground }]}>
                 Open Project
@@ -58,7 +60,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onOpenProject, onN
             }]}
             onPress={onNewProject}
           >
-            <Text style={styles.actionIcon}>✨</Text>
+            <MaterialCommunityIcons name="plus-circle" size={32} color={currentTheme.ui.buttonForeground} />
             <View style={styles.actionTextContainer}>
               <Text style={[styles.actionTitle, { color: currentTheme.ui.buttonForeground }]}>
                 New Project
@@ -75,7 +77,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onOpenProject, onN
               borderColor: currentTheme.ui.border,
             }]}
           >
-            <Text style={styles.actionIcon}>🌿</Text>
+            <MaterialCommunityIcons name="git" size={32} color={currentTheme.ui.buttonForeground} />
             <View style={styles.actionTextContainer}>
               <Text style={[styles.actionTitle, { color: currentTheme.ui.buttonForeground }]}>
                 Clone from Git
@@ -102,7 +104,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onOpenProject, onN
                 }]}
               >
                 <View style={styles.recentIconContainer}>
-                  <Text style={styles.recentIcon}>📁</Text>
+                  <FolderIcon foldername={project.name} size={24} />
                 </View>
                 <View style={styles.recentInfo}>
                   <Text style={[styles.recentName, { color: currentTheme.ui.foreground }]}>
@@ -172,12 +174,9 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     borderWidth: 1,
   },
-  actionIcon: {
-    fontSize: 32,
-    marginRight: 16,
-  },
   actionTextContainer: {
     flex: 1,
+    marginLeft: 16,
   },
   actionTitle: {
     fontSize: 16,
@@ -199,9 +198,7 @@ const styles = StyleSheet.create({
   },
   recentIconContainer: {
     marginRight: 12,
-  },
-  recentIcon: {
-    fontSize: 24,
+    justifyContent: 'center',
   },
   recentInfo: {
     flex: 1,
