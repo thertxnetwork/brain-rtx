@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { View, StyleSheet } from 'react-native';
+import { Button, IconButton } from 'react-native-paper';
 import { NavigationBar } from '../components/ui/NavigationBar';
 import { StatusBar } from '../components/ui/StatusBar';
 import { TabBar } from '../components/editor/TabBar';
@@ -109,61 +109,40 @@ export const EditorScreen: React.FC = () => {
                 backgroundColor: currentTheme.ui.toolWindowBackground,
                 borderTopColor: currentTheme.ui.border,
               }]}>
-                <TouchableOpacity
-                  style={[
-                    styles.panelTab,
-                    activeBottomPanel === 'terminal' && { 
-                      borderBottomColor: currentTheme.editor.keyword,
-                      borderBottomWidth: 2,
-                    },
-                  ]}
+                <Button
+                  mode={activeBottomPanel === 'terminal' ? 'contained' : 'text'}
                   onPress={() => setActiveBottomPanel('terminal')}
+                  compact
+                  icon="console"
                 >
-                  <Text style={[styles.panelTabText, { color: currentTheme.ui.foreground }]}>
-                    💻 Terminal
-                  </Text>
-                </TouchableOpacity>
+                  Terminal
+                </Button>
 
-                <TouchableOpacity
-                  style={[
-                    styles.panelTab,
-                    activeBottomPanel === 'problems' && { 
-                      borderBottomColor: currentTheme.editor.keyword,
-                      borderBottomWidth: 2,
-                    },
-                  ]}
+                <Button
+                  mode={activeBottomPanel === 'problems' ? 'contained' : 'text'}
                   onPress={() => setActiveBottomPanel('problems')}
+                  compact
+                  icon="alert-circle"
                 >
-                  <Text style={[styles.panelTabText, { color: currentTheme.ui.foreground }]}>
-                    ⚠️ Problems
-                  </Text>
-                </TouchableOpacity>
+                  Problems
+                </Button>
 
-                <TouchableOpacity
-                  style={[
-                    styles.panelTab,
-                    activeBottomPanel === 'git' && { 
-                      borderBottomColor: currentTheme.editor.keyword,
-                      borderBottomWidth: 2,
-                    },
-                  ]}
+                <Button
+                  mode={activeBottomPanel === 'git' ? 'contained' : 'text'}
                   onPress={() => setActiveBottomPanel('git')}
+                  compact
+                  icon="source-branch"
                 >
-                  <Text style={[styles.panelTabText, { color: currentTheme.ui.foreground }]}>
-                    🌿 Git
-                  </Text>
-                </TouchableOpacity>
+                  Git
+                </Button>
 
                 <View style={styles.panelTabSpacer} />
 
-                <TouchableOpacity
-                  style={styles.panelTab}
+                <IconButton
+                  icon="close"
+                  size={20}
                   onPress={() => setIsBottomPanelVisible(false)}
-                >
-                  <Text style={[styles.panelTabText, { color: currentTheme.ui.foreground }]}>
-                    ✕
-                  </Text>
-                </TouchableOpacity>
+                />
               </View>
 
               <View style={styles.bottomPanelContent}>
@@ -176,33 +155,30 @@ export const EditorScreen: React.FC = () => {
       
       <View style={styles.bottomBar}>
         {!isBottomPanelVisible && (
-          <TouchableOpacity
-            style={[styles.showPanelButton, { backgroundColor: currentTheme.ui.buttonBackground }]}
+          <Button
+            mode="contained"
             onPress={() => setIsBottomPanelVisible(true)}
+            compact
           >
-            <Text style={[styles.showPanelButtonText, { color: currentTheme.ui.buttonForeground }]}>
-              Show Panel
-            </Text>
-          </TouchableOpacity>
+            Show Panel
+          </Button>
         )}
-        <TouchableOpacity
-          style={[styles.bottomBarButton, { backgroundColor: currentTheme.ui.buttonBackground }]}
+        <Button
+          mode="text"
           onPress={() => setShowFindReplace(true)}
+          compact
+          icon="magnify"
         >
-          <MaterialCommunityIcons name="magnify" size={16} color={currentTheme.ui.buttonForeground} />
-          <Text style={[styles.bottomBarButtonText, { color: currentTheme.ui.buttonForeground }]}>
-            Find
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.bottomBarButton, { backgroundColor: currentTheme.ui.buttonBackground }]}
+          Find
+        </Button>
+        <Button
+          mode="text"
           onPress={() => setShowSettings(true)}
+          compact
+          icon="cog"
         >
-          <MaterialCommunityIcons name="cog" size={16} color={currentTheme.ui.buttonForeground} />
-          <Text style={[styles.bottomBarButtonText, { color: currentTheme.ui.buttonForeground }]}>
-            Settings
-          </Text>
-        </TouchableOpacity>
+          Settings
+        </Button>
       </View>
       
       <StatusBar />
@@ -237,16 +213,10 @@ const styles = StyleSheet.create({
   },
   bottomPanelTabs: {
     flexDirection: 'row',
-    height: 36,
+    height: 48,
     borderTopWidth: 1,
-  },
-  panelTab: {
-    paddingHorizontal: 16,
-    justifyContent: 'center',
-  },
-  panelTabText: {
-    fontSize: 13,
-    fontWeight: '500',
+    alignItems: 'center',
+    paddingHorizontal: 8,
   },
   panelTabSpacer: {
     flex: 1,
@@ -259,29 +229,9 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'center',
     paddingHorizontal: 8,
+    paddingVertical: 4,
     gap: 8,
     borderTopWidth: 1,
     borderTopColor: 'rgba(0, 0, 0, 0.1)',
-  },
-  showPanelButton: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 4,
-  },
-  showPanelButtonText: {
-    fontSize: 12,
-    fontWeight: '500',
-  },
-  bottomBarButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 4,
-    gap: 6,
-  },
-  bottomBarButtonText: {
-    fontSize: 12,
-    fontWeight: '500',
   },
 });

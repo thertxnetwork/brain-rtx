@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
+import { View, StyleSheet, ScrollView, Dimensions } from 'react-native';
+import { Text, Card, Button, Chip } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useThemeStore } from '../store/themeStore';
 import { FolderIcon } from '../components/ui/FileIcon';
@@ -26,133 +27,110 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onOpenProject, onN
           <View style={styles.logoContainer}>
             <MaterialCommunityIcons name="brain" size={64} color={currentTheme.editor.keyword} />
           </View>
-          <Text style={[styles.title, { color: currentTheme.ui.foreground }]}>
+          <Text variant="displaySmall" style={[styles.title, { color: currentTheme.ui.foreground }]}>
             Brain RTX IDE
           </Text>
-          <Text style={[styles.subtitle, { color: currentTheme.ui.foreground, opacity: 0.7 }]}>
+          <Text variant="bodyLarge" style={[styles.subtitle, { color: currentTheme.ui.foreground, opacity: 0.7 }]}>
             Professional Code Editor for Modern Developers
           </Text>
-          <View style={styles.versionBadge}>
-            <Text style={[styles.versionText, { color: currentTheme.editor.keyword }]}>
-              v1.0.0
-            </Text>
-          </View>
+          <Chip icon="information" style={styles.versionBadge}>
+            v1.0.0
+          </Chip>
         </View>
       </View>
       
       <View style={styles.contentWrapper}>
         {/* Quick Actions */}
         <View style={styles.quickActionsSection}>
-          <Text style={[styles.sectionTitle, { color: currentTheme.ui.foreground }]}>
+          <Text variant="headlineSmall" style={[styles.sectionTitle, { color: currentTheme.ui.foreground }]}>
             Get Started
           </Text>
           
           <View style={styles.actionsGrid}>
-            <TouchableOpacity
-              style={[styles.actionCard, { 
-                backgroundColor: currentTheme.ui.toolWindowBackground,
-                borderColor: currentTheme.ui.border,
-              }]}
-              onPress={onOpenProject}
-            >
-              <View style={[styles.actionIconContainer, { backgroundColor: currentTheme.editor.keyword + '20' }]}>
-                <MaterialCommunityIcons name="folder-open" size={32} color={currentTheme.editor.keyword} />
-              </View>
-              <Text style={[styles.actionTitle, { color: currentTheme.ui.foreground }]}>
-                Open Project
-              </Text>
-              <Text style={[styles.actionDescription, { color: currentTheme.ui.foreground, opacity: 0.6 }]}>
-                Open an existing project from your device
-              </Text>
-            </TouchableOpacity>
+            <Card style={styles.actionCard} mode="outlined" onPress={onOpenProject}>
+              <Card.Content style={styles.actionCardContent}>
+                <View style={[styles.actionIconContainer, { backgroundColor: currentTheme.editor.keyword + '20' }]}>
+                  <MaterialCommunityIcons name="folder-open" size={32} color={currentTheme.editor.keyword} />
+                </View>
+                <Text variant="titleMedium" style={[styles.actionTitle, { color: currentTheme.ui.foreground }]}>
+                  Open Project
+                </Text>
+                <Text variant="bodySmall" style={[styles.actionDescription, { color: currentTheme.ui.foreground, opacity: 0.6 }]}>
+                  Open an existing project from your device
+                </Text>
+              </Card.Content>
+            </Card>
             
-            <TouchableOpacity
-              style={[styles.actionCard, { 
-                backgroundColor: currentTheme.ui.toolWindowBackground,
-                borderColor: currentTheme.ui.border,
-              }]}
-              onPress={onNewProject}
-            >
-              <View style={[styles.actionIconContainer, { backgroundColor: currentTheme.editor.string + '20' }]}>
-                <MaterialCommunityIcons name="plus-circle" size={32} color={currentTheme.editor.string} />
-              </View>
-              <Text style={[styles.actionTitle, { color: currentTheme.ui.foreground }]}>
-                New Project
-              </Text>
-              <Text style={[styles.actionDescription, { color: currentTheme.ui.foreground, opacity: 0.6 }]}>
-                Create a new project from scratch
-              </Text>
-            </TouchableOpacity>
+            <Card style={styles.actionCard} mode="outlined" onPress={onNewProject}>
+              <Card.Content style={styles.actionCardContent}>
+                <View style={[styles.actionIconContainer, { backgroundColor: currentTheme.editor.string + '20' }]}>
+                  <MaterialCommunityIcons name="plus-circle" size={32} color={currentTheme.editor.string} />
+                </View>
+                <Text variant="titleMedium" style={[styles.actionTitle, { color: currentTheme.ui.foreground }]}>
+                  New Project
+                </Text>
+                <Text variant="bodySmall" style={[styles.actionDescription, { color: currentTheme.ui.foreground, opacity: 0.6 }]}>
+                  Create a new project from scratch
+                </Text>
+              </Card.Content>
+            </Card>
             
-            <TouchableOpacity
-              style={[styles.actionCard, { 
-                backgroundColor: currentTheme.ui.toolWindowBackground,
-                borderColor: currentTheme.ui.border,
-              }]}
-            >
-              <View style={[styles.actionIconContainer, { backgroundColor: currentTheme.editor.function + '20' }]}>
-                <MaterialCommunityIcons name="git" size={32} color={currentTheme.editor.function} />
-              </View>
-              <Text style={[styles.actionTitle, { color: currentTheme.ui.foreground }]}>
-                Clone Repository
-              </Text>
-              <Text style={[styles.actionDescription, { color: currentTheme.ui.foreground, opacity: 0.6 }]}>
-                Clone from Git repository
-              </Text>
-            </TouchableOpacity>
+            <Card style={styles.actionCard} mode="outlined">
+              <Card.Content style={styles.actionCardContent}>
+                <View style={[styles.actionIconContainer, { backgroundColor: currentTheme.editor.function + '20' }]}>
+                  <MaterialCommunityIcons name="git" size={32} color={currentTheme.editor.function} />
+                </View>
+                <Text variant="titleMedium" style={[styles.actionTitle, { color: currentTheme.ui.foreground }]}>
+                  Clone Repository
+                </Text>
+                <Text variant="bodySmall" style={[styles.actionDescription, { color: currentTheme.ui.foreground, opacity: 0.6 }]}>
+                  Clone from Git repository
+                </Text>
+              </Card.Content>
+            </Card>
           </View>
         </View>
         
         {/* Recent Projects */}
         <View style={styles.recentSection}>
           <View style={styles.sectionHeader}>
-            <Text style={[styles.sectionTitle, { color: currentTheme.ui.foreground }]}>
+            <Text variant="headlineSmall" style={[styles.sectionTitle, { color: currentTheme.ui.foreground }]}>
               Recent Projects
             </Text>
-            <TouchableOpacity>
-              <Text style={[styles.seeAllText, { color: currentTheme.editor.keyword }]}>
-                See All →
-              </Text>
-            </TouchableOpacity>
+            <Button mode="text">See All</Button>
           </View>
           
           <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.recentList}>
             {recentProjects.map((project, index) => (
-              <TouchableOpacity
-                key={index}
-                style={[styles.recentCard, { 
-                  backgroundColor: currentTheme.ui.toolWindowBackground,
-                  borderColor: currentTheme.ui.border,
-                }]}
-              >
-                <View style={styles.recentCardHeader}>
-                  <FolderIcon foldername={project.name} size={32} />
-                  <View style={[styles.projectTypeBadge, { backgroundColor: currentTheme.editor.keyword + '20' }]}>
-                    <Text style={[styles.projectTypeText, { color: currentTheme.editor.keyword }]}>
+              <Card key={index} style={styles.recentCard} mode="outlined">
+                <Card.Content>
+                  <View style={styles.recentCardHeader}>
+                    <FolderIcon foldername={project.name} size={32} />
+                    <Chip mode="flat" compact>
                       {project.type}
+                    </Chip>
+                  </View>
+                  <Text variant="titleMedium" style={[styles.recentName, { color: currentTheme.ui.foreground }]}>
+                    {project.name}
+                  </Text>
+                  <Text variant="bodySmall" style={[styles.recentPath, { color: currentTheme.ui.foreground, opacity: 0.5 }]} numberOfLines={1}>
+                    {project.path}
+                  </Text>
+                  <View style={styles.recentFooter}>
+                    <MaterialCommunityIcons name="clock-outline" size={14} color={currentTheme.ui.foreground} style={{ opacity: 0.5 }} />
+                    <Text variant="bodySmall" style={[styles.recentTime, { color: currentTheme.ui.foreground, opacity: 0.5 }]}>
+                      {project.lastOpened}
                     </Text>
                   </View>
-                </View>
-                <Text style={[styles.recentName, { color: currentTheme.ui.foreground }]}>
-                  {project.name}
-                </Text>
-                <Text style={[styles.recentPath, { color: currentTheme.ui.foreground, opacity: 0.5 }]} numberOfLines={1}>
-                  {project.path}
-                </Text>
-                <View style={styles.recentFooter}>
-                  <MaterialCommunityIcons name="clock-outline" size={14} color={currentTheme.ui.foreground} style={{ opacity: 0.5 }} />
-                  <Text style={[styles.recentTime, { color: currentTheme.ui.foreground, opacity: 0.5 }]}>
-                    {project.lastOpened}
-                  </Text>
-                </View>
-              </TouchableOpacity>
+                </Card.Content>
+              </Card>
             ))}
           </ScrollView>
         </View>
 
         {/* Features Highlight */}
         <View style={styles.featuresSection}>
-          <Text style={[styles.sectionTitle, { color: currentTheme.ui.foreground }]}>
+          <Text variant="headlineSmall" style={[styles.sectionTitle, { color: currentTheme.ui.foreground }]}>
             Features
           </Text>
           <View style={styles.featuresGrid}>
@@ -162,21 +140,17 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onOpenProject, onN
               { icon: 'code-tags', title: 'Syntax Highlighting', desc: 'Multiple languages' },
               { icon: 'file-tree', title: 'Project Explorer', desc: 'Easy navigation' },
             ].map((feature, index) => (
-              <View
-                key={index}
-                style={[styles.featureCard, { 
-                  backgroundColor: currentTheme.ui.toolWindowBackground,
-                  borderColor: currentTheme.ui.border,
-                }]}
-              >
-                <MaterialCommunityIcons name={feature.icon as any} size={24} color={currentTheme.editor.keyword} />
-                <Text style={[styles.featureTitle, { color: currentTheme.ui.foreground }]}>
-                  {feature.title}
-                </Text>
-                <Text style={[styles.featureDesc, { color: currentTheme.ui.foreground, opacity: 0.6 }]}>
-                  {feature.desc}
-                </Text>
-              </View>
+              <Card key={index} style={styles.featureCard} mode="outlined">
+                <Card.Content style={styles.featureCardContent}>
+                  <MaterialCommunityIcons name={feature.icon as any} size={24} color={currentTheme.editor.keyword} />
+                  <Text variant="titleSmall" style={[styles.featureTitle, { color: currentTheme.ui.foreground }]}>
+                    {feature.title}
+                  </Text>
+                  <Text variant="bodySmall" style={[styles.featureDesc, { color: currentTheme.ui.foreground, opacity: 0.6 }]}>
+                    {feature.desc}
+                  </Text>
+                </Card.Content>
+              </Card>
             ))}
           </View>
         </View>
@@ -205,26 +179,15 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   title: {
-    fontSize: 36,
-    fontWeight: 'bold',
     marginBottom: 8,
     textAlign: 'center',
   },
   subtitle: {
-    fontSize: 16,
     textAlign: 'center',
     marginBottom: 16,
   },
   versionBadge: {
-    paddingHorizontal: 16,
-    paddingVertical: 6,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: 'rgba(100, 100, 100, 0.3)',
-  },
-  versionText: {
-    fontSize: 13,
-    fontWeight: '600',
+    marginTop: 8,
   },
   contentWrapper: {
     flex: 1,
@@ -234,8 +197,6 @@ const styles = StyleSheet.create({
     marginBottom: 32,
   },
   sectionTitle: {
-    fontSize: 22,
-    fontWeight: '700',
     marginBottom: 16,
   },
   actionsGrid: {
@@ -246,10 +207,10 @@ const styles = StyleSheet.create({
   actionCard: {
     flex: 1,
     minWidth: width > 600 ? 200 : '100%',
-    padding: 20,
-    borderRadius: 16,
-    borderWidth: 1,
+  },
+  actionCardContent: {
     alignItems: 'center',
+    padding: 8,
   },
   actionIconContainer: {
     width: 64,
@@ -260,13 +221,10 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   actionTitle: {
-    fontSize: 16,
-    fontWeight: '600',
     marginBottom: 6,
     textAlign: 'center',
   },
   actionDescription: {
-    fontSize: 13,
     textAlign: 'center',
   },
   recentSection: {
@@ -278,18 +236,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 16,
   },
-  seeAllText: {
-    fontSize: 14,
-    fontWeight: '600',
-  },
   recentList: {
     flexDirection: 'row',
   },
   recentCard: {
     width: 240,
-    padding: 16,
-    borderRadius: 12,
-    borderWidth: 1,
     marginRight: 12,
   },
   recentCardHeader: {
@@ -298,22 +249,10 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     marginBottom: 12,
   },
-  projectTypeBadge: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 8,
-  },
-  projectTypeText: {
-    fontSize: 10,
-    fontWeight: '600',
-  },
   recentName: {
-    fontSize: 16,
-    fontWeight: '600',
     marginBottom: 4,
   },
   recentPath: {
-    fontSize: 12,
     marginBottom: 8,
   },
   recentFooter: {
@@ -321,9 +260,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 4,
   },
-  recentTime: {
-    fontSize: 11,
-  },
+  recentTime: {},
   featuresSection: {
     marginBottom: 32,
   },
@@ -335,20 +272,17 @@ const styles = StyleSheet.create({
   featureCard: {
     flex: 1,
     minWidth: width > 600 ? 150 : '45%',
-    padding: 16,
-    borderRadius: 12,
-    borderWidth: 1,
+  },
+  featureCardContent: {
     alignItems: 'center',
+    padding: 8,
   },
   featureTitle: {
-    fontSize: 14,
-    fontWeight: '600',
     marginTop: 8,
     marginBottom: 4,
     textAlign: 'center',
   },
   featureDesc: {
-    fontSize: 11,
     textAlign: 'center',
   },
 });
